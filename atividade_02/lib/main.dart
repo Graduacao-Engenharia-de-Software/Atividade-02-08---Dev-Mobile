@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-// Inicia a aplicação Flutter
 void main() {
   runApp(const MyApp());
 }
 
-// Widget principal da aplicação
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -17,12 +15,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const RegistrationForm(), // A tela principal será o nosso formulário
+      home: const RegistrationForm(),
     );
   }
 }
 
-// Widget que representa o formulário
 class RegistrationForm extends StatefulWidget {
   const RegistrationForm({super.key});
 
@@ -31,19 +28,14 @@ class RegistrationForm extends StatefulWidget {
 }
 
 class _RegistrationFormState extends State<RegistrationForm> {
-  // Chave global para identificar e validar o formulário
   final _formKey = GlobalKey<FormState>();
 
-  // Controladores para obter os valores dos campos
   final _nameController = TextEditingController();
   final _dobController = TextEditingController();
 
-  // Variável para armazenar o sexo selecionado
   String? _selectedGender;
-  // Variável para armazenar a data de nascimento
   DateTime? _selectedDate;
 
-  // Função para exibir o seletor de data
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -57,13 +49,11 @@ class _RegistrationFormState extends State<RegistrationForm> {
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
-        // Formata a data para exibição no formato dd/MM/yyyy
         _dobController.text = "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
       });
     }
   }
 
-  // Função para validar se a pessoa tem mais de 18 anos
   String? _validateAge(String? value) {
     if (_selectedDate == null) {
       return 'Por favor, selecione a data de nascimento.';
@@ -82,11 +72,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
     return null;
   }
 
-  // Função para lidar com o envio do formulário
   void _submitForm() {
-    // Acessa o estado do formulário através da chave e o valida
     if (_formKey.currentState!.validate()) {
-      // Se o formulário for válido, exibe um dialog de sucesso
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -115,7 +102,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
   @override
   void dispose() {
-    // Limpa os controladores quando o widget é descartado
     _nameController.dispose();
     _dobController.dispose();
     super.dispose();
@@ -134,7 +120,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              // Campo Nome Completo
               TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(
@@ -151,7 +136,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
               ),
               const SizedBox(height: 20),
 
-              // Campo Data de Nascimento
               TextFormField(
                 controller: _dobController,
                 decoration: const InputDecoration(
@@ -159,13 +143,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.calendar_today),
                 ),
-                readOnly: true, // Impede a digitação manual
+                readOnly: true,
                 onTap: () => _selectDate(context),
-                validator: _validateAge, // Aplica a validação de idade
+                validator: _validateAge,
               ),
               const SizedBox(height: 20),
 
-              // Campo Sexo
               DropdownButtonFormField<String>(
                 value: _selectedGender,
                 decoration: const InputDecoration(
@@ -193,7 +176,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
               ),
               const SizedBox(height: 30),
 
-              // Botão de Enviar
               ElevatedButton(
                 onPressed: _submitForm,
                 style: ElevatedButton.styleFrom(
